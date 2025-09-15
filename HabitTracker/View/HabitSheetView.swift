@@ -20,12 +20,7 @@ struct HabitSheetView: View {
             Text(title)
                 .font(.headline)
             
-            TextField("Max 15 characters", text: $text)
-                .onChange(of: text) { newValue in
-                    if newValue.count > 15 {
-                        text = String(newValue.prefix(15))
-                    }
-                }
+            TextField("Write your new habit...", text: $text)
                 .textFieldStyle(.roundedBorder)
                 .padding()
             
