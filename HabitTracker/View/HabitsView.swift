@@ -6,16 +6,22 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct HabitsView: View {
-    @StateObject private var manager = HabitManager()
+    @Environment(\.modelContext) private var context
+    @StateObject private var manager: HabitManager
     
     @State private var showingAddDialog = false
     @State private var newItemText = ""
     
+    init() {
+        _manager = StateObject(wrappedValue: HabitManager.preview)
+    }
+    
     var body: some View {
         NavigationStack {
-            if manager.habitsList.isEmpty {
+            if manager.habits.isEmpty {
                 VStack {
                     Spacer()
                     Text("No habits yet")
@@ -40,13 +46,16 @@ struct HabitsView: View {
                         title: "Add New Habit",
                         primaryText: "Add",
                         onPrimary: {
-                            let newCounter = HabitsListItem(title: newItemText, count: 0, countType: "times")
-                            manager.habitsList.append(newCounter)
+                            let newHabit = Habit(title: newItemText, streak: 0)
+                            manager.addHabit(habit: newHabit)
                         }
                     )
                 }
+                .onAppear {
+                    manager.setContext(context)
+                }
             } else {
-                List($manager.habitsList, id: \.id, editActions: .delete) { $habitsListItem in
+                List($manager.habits, id: \.id, editActions: .delete) { $habitsListItem in
                     HabitsListElement(habitsListItem: $habitsListItem)
                         .listRowInsets(EdgeInsets())
                         .listRowSeparator(.hidden)
@@ -69,10 +78,13 @@ struct HabitsView: View {
                         title: "Add New Habit",
                         primaryText: "Add",
                         onPrimary: {
-                            let newCounter = HabitsListItem(title: newItemText, count: 0, countType: "times")
-                            manager.habitsList.append(newCounter)
+                            let newHabit = Habit(title: newItemText, streak: 0)
+                            manager.addHabit(habit: newHabit)
                         }
                     )
+                }
+                .onAppear {
+                    manager.setContext(context)
                 }
             }
         }
