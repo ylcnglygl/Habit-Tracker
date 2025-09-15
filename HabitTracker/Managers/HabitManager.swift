@@ -16,12 +16,14 @@ class Habit {
     var title: String
     var createdAt: Date
     var streak: Int
+    var lastCompleted: Date?
     
     init(title: String, streak: Int = 0) {
         self.id = UUID()
         self.title = title
         self.createdAt = Date()
         self.streak = streak
+        self.lastCompleted = nil
     }
 }
 
@@ -70,7 +72,7 @@ class HabitManager: ObservableObject {
         save()
     }
 
-    private func save() {
+    func save() {
         guard let context else { return }
         do {
             try context.save()
