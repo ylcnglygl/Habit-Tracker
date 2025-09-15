@@ -55,11 +55,44 @@ struct HabitsView: View {
                     manager.setContext(context)
                 }
             } else {
-                List($manager.habits, id: \.id, editActions: .delete) { $habitsListItem in
-                    HabitsListElement(habitsListItem: $habitsListItem)
-                        .listRowInsets(EdgeInsets())
-                        .listRowSeparator(.hidden)
-                        .listRowBackground(Color.clear)
+                List {
+                    ForEach($manager.habits) { $habit in
+                        HabitsListElement(habitsListItem: habit)
+                            .listRowInsets(EdgeInsets())
+                            .listRowSeparator(.hidden)
+                            .listRowBackground(Color.clear)
+                            .contentShape(Rectangle())
+                            .onTapGesture {
+                                let today = Calendar.current.startOfDay(for: Date())
+                                
+                                if let last = habit.lastCompleted {
+                                    let lastDay = Calendar.current.startOfDay(for: last)
+                                    let diff = Calendar.current.dateComponents([.day], from: lastDay, to: today).day ?? 0
+                                    
+                                    if diff == 1 {
+                                        // Ardışık gün, streak artar
+                                        habit.streak += 1
+                                    } else if diff > 1 {
+                                        // Gün atlandı, streak sıfırdan başlar
+                                        habit.streak = 1
+                                    }
+                                    // diff == 0 → bugün zaten tamamlandı, değiştirme
+                                    
+                                    habit.lastCompleted = Date()
+                                } else {
+                                    // İlk kez tamamlanıyor
+                                    habit.streak = 1
+                                    habit.lastCompleted = Date()
+                                }
+                                
+                                // SwiftData için kaydet
+                                manager.save()
+                            }
+
+                    }
+                    .onDelete { index in
+                        manager.delete(at: index)
+                    }
                 }
                 .scrollContentBackground(.hidden)
                 .navigationTitle("Habits")
@@ -67,6 +100,7 @@ struct HabitsView: View {
                     ToolbarItem(placement: .navigationBarTrailing) {
                         Button {
                             showingAddDialog = true
+                            newItemText = ""
                         } label: {
                             Image(systemName: "plus")
                         }
