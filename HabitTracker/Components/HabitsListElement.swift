@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct HabitsListElement: View {
-    @Binding var habitsListItem: Habit
+    var habitsListItem: Habit
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 20)
@@ -24,18 +24,11 @@ struct HabitsListElement: View {
                 
                 Spacer()
                 
-                Divider()
-                    .frame(width: 1, height: 100)
-                    .background(Color.white.opacity(0.6))
-                
-                Spacer()
-                
                 Text("\(habitsListItem.streak)")
                     .font(.title2)
                     .fontWeight(.bold)
                     .foregroundColor(Color(uiColor: .label))
-                
-                Spacer()
+                    .padding(.horizontal, 36)
             }
             
         }
