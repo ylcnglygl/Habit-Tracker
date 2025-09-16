@@ -19,7 +19,7 @@ struct HabitsListElement: View {
                 Text(habitsListItem.title)
                     .font(.title3)
                     .fontWeight(.bold)
-                    .foregroundColor(Color(uiColor: .label))
+                    .foregroundColor(.white)
                     .padding()
                 
                 Spacer()
@@ -27,7 +27,7 @@ struct HabitsListElement: View {
                 Text("\(habitsListItem.streak)")
                     .font(.title2)
                     .fontWeight(.bold)
-                    .foregroundColor(Color(uiColor: .label))
+                    .foregroundColor(.white)
                     .padding(.horizontal, 36)
             }
             
