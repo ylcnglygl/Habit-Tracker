@@ -1,5 +1,12 @@
 # Habit-Tracker
 
+## Screenshots  
+
+<p float="left">
+  <img src="habits.png" alt="Habits List" width="250" />
+  <img src="add%20habit.png" alt="Add Habit" width="250" />
+</p>
+
 ## Overview  
 Habit-Tracker is a simple yet effective habit tracker app built with **SwiftUI**. The app allows users to track their habits, maintain streaks, and visualize progress in an intuitive way.  
 
